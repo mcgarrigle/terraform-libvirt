@@ -1,0 +1,8 @@
+
+wget https://releases.hashicorp.com/terraform/1.6.6/terraform_1.6.6_linux_amd64.zip
+unzip terraform_1.6.6_linux_amd64.zip
+
+./terraform destroy -auto-approve
+./terraform apply -auto-approve
+virsh console terraform_test
+virsh net-dhcp-leases --network default
