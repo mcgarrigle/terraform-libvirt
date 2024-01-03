@@ -12,7 +12,7 @@ provider "libvirt" {
 
 resource "libvirt_cloudinit_disk" "cloudinit_disk" {
   name           = "${var.guest_name}.iso"
-  pool           = "filesystems"
+  pool           = var.storage_pool
   user_data      = templatefile("${path.module}/cloud-init/user-data", {})
   meta_data      = templatefile("${path.module}/cloud-init/meta-data", { hostname = "${var.guest_host_name}" })
   network_config = templatefile("${path.module}/cloud-init/network-config", {})
@@ -20,9 +20,8 @@ resource "libvirt_cloudinit_disk" "cloudinit_disk" {
 
 resource "libvirt_volume" "primary_disk" {
   name   = "${var.guest_name}.qcow2"
-  pool   = "filesystems"
-  source = "http://node1.mac.wales:8081/repository/cloud-images/rocky/Rocky-9-GenericCloud-Base-9.2-20230513.0.x86_64.qcow2"
-  # source = "http://ftp3.br.freebsd.org/pub/rocky/9.2/images/x86_64/Rocky-9-GenericCloud-Base-9.2-20230513.0.x86_64.qcow2"
+  pool   = var.storage_pool
+  source = var.image_url
 }
 
 resource "libvirt_domain" "guest_domain" {
