@@ -41,7 +41,7 @@ resource "libvirt_domain" "guest_domain" {
 
   network_interface {
     hostname       = "master"
-    network_name   = "default"
+    network_name   = "bridge"
     wait_for_lease = false
   }
 
