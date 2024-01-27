@@ -1,58 +1,17 @@
-terraform {
-  required_providers {
-    libvirt = {
-      source = "dmacvicar/libvirt"
-    }
-  }
+module "libvirt_domain_foo" {
+  source = "./modules/terraform-module-libvirt-domain"
+
+  guest_name = "foo"
+  cloud_init_user_data      = templatefile("${path.module}/cloud-init/user-data", {})
+  cloud_init_meta_data      = templatefile("${path.module}/cloud-init/meta-data", { hostname = "foo" })
+  cloud_init_network_config = templatefile("${path.module}/cloud-init/network-config-dhcp", {})
 }
 
-provider "libvirt" {
-  uri = "qemu:///system"
-}
+module "libvirt_domain_bar" {
+  source = "./modules/terraform-module-libvirt-domain"
 
-resource "libvirt_cloudinit_disk" "cloudinit_disk" {
-  name           = "${var.guest_name}.iso"
-  pool           = var.storage_pool
-  user_data      = templatefile("${path.module}/cloud-init/user-data", {})
-  meta_data      = templatefile("${path.module}/cloud-init/meta-data", { hostname = "${var.guest_host_name}" })
-  network_config = templatefile("${path.module}/cloud-init/network-config", {})
-}
-
-resource "libvirt_volume" "primary_disk" {
-  name   = "${var.guest_name}.qcow2"
-  pool   = var.storage_pool
-  source = var.image_url
-}
-
-resource "libvirt_domain" "guest_domain" {
-  name = var.guest_name
-
-  cpu {
-    mode = "host-passthrough"
-  }
-  vcpu   = 2
-  memory = 4096
-
-  disk {
-    volume_id = libvirt_volume.primary_disk.id
-  }
-
-  cloudinit = libvirt_cloudinit_disk.cloudinit_disk.id
-
-  network_interface {
-    hostname       = "master"
-    network_name   = "bridge"
-    wait_for_lease = false
-  }
-
-  graphics {
-    type = "vnc"
-  }
-
-  console {
-    type        = "pty"
-    target_type = "serial"
-    target_port = "0"
-  }
-
+  guest_name = "bar"
+  cloud_init_user_data      = templatefile("${path.module}/cloud-init/user-data", {})
+  cloud_init_meta_data      = templatefile("${path.module}/cloud-init/meta-data", { hostname = "bar" })
+  cloud_init_network_config = templatefile("${path.module}/cloud-init/network-config-dhcp", {})
 }
