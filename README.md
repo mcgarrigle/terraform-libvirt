@@ -15,11 +15,11 @@ wget http://node1.mac.wales:8081/repository/cloud-images/rocky/Rocky-9-GenericCl
 virsh vol-create-as --pool filesystems --name rocky-base --capacity 1g
 virsh vol-upload --vol rocky-base --pool filesystems --file Rocky-9-GenericCloud-Base-9.2-20230513.0.x86_64.qcow2
 
-./terraform init
-./terraform apply -auto-approve
+terraform init
+terraform apply -auto-approve
 
 virsh console foo
 virsh net-dhcp-leases --network default
 
-./terraform destroy -auto-approve
+terraform destroy -auto-approve
 ```
