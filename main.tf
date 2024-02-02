@@ -23,17 +23,17 @@ module "libvirt_domain" {
 
   providers = { libvirt = libvirt }
 
-  for_each = var.swarm
+  for_each = var.cluster
 
   guest_name           = "${each.key}"
-  vcpu                 = 2
-  memory               = 4096
+  vcpu                 = "${each.value.vcpu}"
+  memory               = "${each.value.memory}"
   network_name         = "bridge"
   subnet_type          = "static"
   ip_address           = "${each.value.ip_address}"
   gateway_address      = "192.168.1.254"
   dns_server           = "1.1.1.1"
   base_volume_name     = "rocky-base-9.2"
-  base_volume_size     = 20 * 1073741824
+  base_volume_size     = "${each.value.base_volume_size}"
   cloud_init_user_data = file("${path.module}/cloud-init/user-data")
 }
