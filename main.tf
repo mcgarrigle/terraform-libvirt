@@ -6,7 +6,7 @@ terraform {
 }
 
 provider "libvirt" {
-  uri = "qemu:///system"
+  uri = var.libvirt_uri
 }
 
 module "libvirt_domain_foo" {

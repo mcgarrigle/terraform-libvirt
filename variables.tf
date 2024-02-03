@@ -17,6 +17,10 @@ variable "cluster" {
   }
 }
 
+variable "libvirt_uri" {
+  type    = string
+}
+
 variable "storage_pool" {
   type    = string
   default = "filesystems"
