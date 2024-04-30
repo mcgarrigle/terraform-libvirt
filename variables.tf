@@ -2,14 +2,29 @@
 variable "cluster" {
   type = map(any)
   default = {
-    node4 = {
-      ip_address       = "192.168.1.24" 
-      vcpu             = 4
+    guest1 = {
+      guest_name       = "node1"
+      ip_address       = "192.168.1.21"
+      gateway_address  = "192.168.1.254"
+      dns_server       = "1.1.1.1"
+      vcpu             = 2
       memory           = 8192
       base_volume_size = 80 * 1073741824
     }
-    node5 = {
-      ip_address        = "192.168.1.25" 
+    guest2 = {
+      guest_name       = "node2"
+      ip_address       = "192.168.1.22"
+      gateway_address  = "192.168.1.254"
+      dns_server       = "1.1.1.1"
+      vcpu             = 2
+      memory           = 8192
+      base_volume_size = 80 * 1073741824
+    }
+    guest3 = {
+      guest_name       = "node3"
+      ip_address       = "192.168.1.23"
+      gateway_address  = "192.168.1.254"
+      dns_server       = "1.1.1.1"
       vcpu             = 2
       memory           = 8192
       base_volume_size = 80 * 1073741824

@@ -1,4 +1,3 @@
-
 terraform {
   required_providers {
     libvirt = { source = "dmacvicar/libvirt" }
@@ -16,8 +15,8 @@ module "libvirt_domain" {
 
   for_each = var.cluster
 
-  guest_name           = "${each.key}"
-  hostname             = "${each.key}"
+  guest_name           = "${each.value.guest_name}"
+  hostname             = "${each.value.guest_name}"
   vcpu                 = "${each.value.vcpu}"
   memory               = "${each.value.memory}"
   network_name         = "bridge"
@@ -28,8 +27,8 @@ module "libvirt_domain" {
   base_volume_name     = var.base_volume_name
   base_volume_size     = "${each.value.base_volume_size}"
   cloud_init_user_data = templatefile("${path.module}/cloud-init/user-data", {
-    fqdn           = "${each.key}"
-    hostname       = "${each.key}"
+    fqdn           = "${each.value.guest_name}"
+    hostname       = "${each.value.guest_name}"
     user           = var.user
     ssh_public_key = var.ssh_public_key
   })
