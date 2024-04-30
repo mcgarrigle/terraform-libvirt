@@ -9,15 +9,6 @@ provider "libvirt" {
   uri = var.libvirt_uri
 }
 
-module "libvirt_domain_foo" {
-  source = "./modules/terraform-module-libvirt-domain"
-
-  guest_name           = "foo"
-  base_volume_name     = "rocky-base-9.2"
-  base_volume_size     = 10 * 1073741824
-  cloud_init_user_data = file("${path.module}/cloud-init/user-data")
-}
-
 module "libvirt_domain" {
   source = "./modules/terraform-module-libvirt-domain"
 
@@ -26,6 +17,7 @@ module "libvirt_domain" {
   for_each = var.cluster
 
   guest_name           = "${each.key}"
+  hostname             = "${each.key}"
   vcpu                 = "${each.value.vcpu}"
   memory               = "${each.value.memory}"
   network_name         = "bridge"
@@ -33,7 +25,12 @@ module "libvirt_domain" {
   ip_address           = "${each.value.ip_address}"
   gateway_address      = "192.168.1.254"
   dns_server           = "1.1.1.1"
-  base_volume_name     = "rocky-base-9.2"
+  base_volume_name     = var.base_volume_name
   base_volume_size     = "${each.value.base_volume_size}"
-  cloud_init_user_data = file("${path.module}/cloud-init/user-data")
+  cloud_init_user_data = templatefile("${path.module}/cloud-init/user-data", {
+    fqdn           = "${each.key}"
+    hostname       = "${each.key}"
+    user           = var.user
+    ssh_public_key = var.ssh_public_key
+  })
 }

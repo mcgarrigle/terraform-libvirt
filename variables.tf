@@ -2,17 +2,17 @@
 variable "cluster" {
   type = map(any)
   default = {
-    bar1 = {
+    node4 = {
       ip_address       = "192.168.1.24" 
-      vcpu             = 2
-      memory           = 4096
-      base_volume_size = 20 * 1073741824
+      vcpu             = 4
+      memory           = 8192
+      base_volume_size = 80 * 1073741824
     }
-    bar2 = {
+    node5 = {
       ip_address        = "192.168.1.25" 
       vcpu             = 2
-      memory           = 4096
-      base_volume_size = 20 * 1073741824
+      memory           = 8192
+      base_volume_size = 80 * 1073741824
     }
   }
 }
@@ -24,4 +24,16 @@ variable "libvirt_uri" {
 variable "storage_pool" {
   type    = string
   default = "filesystems"
+}
+
+variable "base_volume_name" {
+  type    = string
+}
+
+variable "user" {
+  type = string
+}
+
+variable "ssh_public_key" {
+  type = string
 }
